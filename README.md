@@ -6,10 +6,10 @@
 
 | 目录 | 主题 | 条目 |
 |---|---|---|
-| [debugging/](debugging/) | 排查与推理的纪律 | 11 |
-| [verification/](verification/) | 交付前的验证 | 7 |
-| [tooling/](tooling/) | 工具与自动化的边界 | 16 |
-| [collaboration/](collaboration/) | 与人的协作约定 | 13 |
+| [debugging/](debugging/) | 排查与推理的纪律 | 15 |
+| [verification/](verification/) | 交付前的验证 | 9 |
+| [tooling/](tooling/) | 工具与自动化的边界 | 23 |
+| [collaboration/](collaboration/) | 与人的协作约定 | 17 |
 | [research/](research/) | 信息核实的方法 | 2 |
 
 ---
@@ -27,15 +27,10 @@
 - **[分清「水平」和「变化」](debugging/change-vs-level.md)** — 「从 A 到 B」写成「低于 B」，结果会完全反过来
 - **[分不清 TCP 和 UDP，就别急着怪带宽](debugging/compare-transports-before-blaming-bandwidth.md)** — 同一线路 TCP 流畅、UDP 丢 30%，带宽测出来还富余。吞吐和丢包是两个指标
 - **[读 PR 别只看正文](debugging/read-pr-comments-not-just-body.md)** — 正文写着「未联调」，评论里早就贴了联调通过的证据。开口前先读完记录
-
-- **[CI 红了先看分支落后多少](debugging/check-branch-freshness-before-blaming-flake.md)**
-  workflow 来自基分支、代码来自 PR head。主干上早修好的测试，在落后的分支上必然失败。
-- **[元素被压成 0 宽，会被判成「不可见」](debugging/zero-width-collapse-looks-invisible.md)**
-  只在 CI 塌陷：本地字体窄、CI 字体宽。可见在浏览器里是个几何判断，不是存在判断。
-- **[断言别命中你自己发的文本](debugging/assertions-that-match-your-own-input.md)**
-  额度早就用完了，探针还是绿的——标记字符串同时存在于用户气泡和会话标题里。
-- **[提交信息里的 skip-ci 标记会吞掉整条 workflow](debugging/skip-ci-suppresses-workflow-runs.md)**
-  不是跳过几步，是这个提交根本不创建 run。发版工具默认加的那个后缀，能让流水线静默停摆。
+- **[CI 红了先看分支落后多少](debugging/check-branch-freshness-before-blaming-flake.md)** — workflow 来自基分支、代码来自 PR head。主干上早修好的测试，在落后的分支上必然失败
+- **[元素被压成 0 宽，会被判成「不可见」](debugging/zero-width-collapse-looks-invisible.md)** — 只在 CI 塌陷：本地字体窄、CI 字体宽。可见在浏览器里是个几何判断，不是存在判断
+- **[断言别命中你自己发的文本](debugging/assertions-that-match-your-own-input.md)** — 额度早就用完了，探针还是绿的——标记字符串同时存在于用户气泡和会话标题里
+- **[提交信息里的 skip-ci 标记会吞掉整条 workflow](debugging/skip-ci-suppresses-workflow-runs.md)** — 不是跳过几步，是这个提交根本不创建 run。发版工具默认加的那个后缀，能让流水线静默停摆
 
 ## 交付前验证
 
@@ -46,6 +41,8 @@
 - **[一致性不能证明正确性](verification/consistency-is-not-correctness.md)** — 两个实现结果一致，可能只是同一个坏模型
 - **[没见它红过的测试等于没测](verification/make-the-test-fail-first.md)** — 写完测试，把修复改回去看它失败一次
 - **[碰撞检测测不出「该挖的洞没挖」](verification/assert-the-feature-not-just-collisions.md)** — 结构件要逐特征断言，不是跑一遍干涉检查就算验过
+- **[mock 全绿，不等于修好了](verification/mocks-passing-is-not-a-fix.md)** — 用例里 mock 立即返回，竞态被完全掩盖。用户否决你的判断时，先假设用户是对的
+- **[碰真实账号的功能，必须真跑一次](verification/live-test-real-accounts.md)** — mock 只证明契约对，不证明真能拿到凭据。真实凭据只经环境变量注入
 
 ## 工具与自动化
 
@@ -63,29 +60,15 @@
 - **[文档的内容可能在图片里](tooling/documents-hide-content-in-images.md)** — 只读到文字不代表读全了
 - **[能写成 if 就别写提示词](tooling/prefer-rules-over-model-calls.md)** — 在自己算出来的特征上再调一次模型，是花钱买黑箱
 - **[验的是「用户看到的」](tooling/look-at-what-the-user-sees.md)** — API 返回 200、字段齐全，和界面显示了，是完全不同的断言
-
-- **[浏览器改动自己跑一遍再交付](tooling/verify-in-browser-before-delivery.md)**
-  交代码让用户测，被回「你自己打开浏览器测」。实测当场抓到两个静态审阅发现不了的问题。
-
-- **[自动化打开的窗口移出屏幕](tooling/move-automation-windows-offscreen.md)**
-  用户不需要提防一个看不见的窗口。只动自己开的，移不动就说明。
-
-- **[CI 的 shell 逻辑，本地就能跑](tooling/run-ci-shell-locally.md)**
-  把 run 块从 yml 里抽出来跑。抄脚本会失真，Windows 版 jq 还会给 stdout 加 CRLF。
-- **[worktree 里别重装依赖，用 junction 借](tooling/share-node-modules-across-worktrees.md)**
-  依赖可以共享，产物必须各自生成——junction 了构建目录，程序会加载主检出的代码。
-- **[上传到 Release 的文件名会被改写](tooling/release-asset-names-get-sanitized.md)**
-  空格变成点号，自动更新按原名找就是 404。文件名一旦有别的系统依赖，它就是接口。
-- **[别用 heredoc 喂补丁脚本](tooling/heredoc-escaping-pitfall.md)**
-  两层解析加上静默失效。改文件用编辑工具，heredoc 只跑不含转义的命令。
-- **[环境里配了代理，git push 会静默失败](tooling/proxy-env-breaks-git-push.md)**
-  代理变量指向的端口根本没在监听。网络是通的、工具却不工作时，先 env | grep -i proxy。
-- **[不要弹出任何窗口](tooling/dont-open-windows-at-all.md)**
-  终端、浏览器、后台标签页都算。真正的后台是不创建窗口。
-- **[describe 层的 skip 会让单个用例的 timeout 失效](tooling/describe-skip-disables-per-test-timeout.md)**
-  长用例在 10 分钟整被杀，看起来像应用崩溃。用 test.setTimeout() 兜底。
-- **[beforeAll 是每个 worker 一次，不是每个文件一次](tooling/beforeall-runs-per-worker.md)**
-  失败重启后，剩余用例拿到全新环境。需要数据的用例自己幂等补齐。
+- **[浏览器改动自己跑一遍再交付](tooling/verify-in-browser-before-delivery.md)** — 交代码让用户测，被回「你自己打开浏览器测」。实测当场抓到两个静态审阅发现不了的问题
+- **[自动化打开的窗口移出屏幕](tooling/move-automation-windows-offscreen.md)** — 用户不需要提防一个看不见的窗口。只动自己开的，移不动就说明
+- **[不要弹出任何窗口](tooling/dont-open-windows-at-all.md)** — 终端、浏览器、后台标签页都算。真正的后台是不创建窗口
+- **[CI 的 shell 逻辑，本地就能跑](tooling/run-ci-shell-locally.md)** — 把 run 块从 yml 里抽出来跑。抄脚本会失真，Windows 版 jq 还会给 stdout 加 CRLF
+- **[worktree 里别重装依赖，用 junction 借](tooling/share-node-modules-across-worktrees.md)** — 依赖可以共享，产物必须各自生成，否则程序会加载主检出的代码
+- **[上传到 Release 的文件名会被改写](tooling/release-asset-names-get-sanitized.md)** — 空格变成点号，自动更新按原名找就是 404。文件名一旦有别的系统依赖，它就是接口
+- **[环境里配了代理，git push 会静默失败](tooling/proxy-env-breaks-git-push.md)** — 代理变量指向的端口根本没在监听。网络是通的、工具却不工作时，先 `env | grep -i proxy`
+- **[describe 层的 skip 会让单个用例的 timeout 失效](tooling/describe-skip-disables-per-test-timeout.md)** — 长用例在 10 分钟整被杀，看起来像应用崩溃。用 `test.setTimeout()` 兜底
+- **[beforeAll 是每个 worker 一次，不是每个文件一次](tooling/beforeall-runs-per-worker.md)** — 失败重启后，剩余用例拿到全新环境。需要数据的用例自己幂等补齐
 
 ## 协作约定
 
@@ -100,25 +83,12 @@
 - **[别补回「丢失」的内容](collaboration/dont-restore-what-may-be-deleted.md)** — 文件变小可能是对方有意删的
 - **[别往同步目录里擅自写入](collaboration/dont-write-into-synced-folders.md)** — 有权限不等于有授权
 - **[发版跑着的时候不要推 main](collaboration/dont-push-while-release-runs.md)** — 会留下只有 tag 没有产物的半成品；三个检查都会骗你
-
-- **[先给能用的答案，再决定要不要深挖](collaboration/answer-first-then-investigate.md)**
-  多轮取证容易被「算了」打断。第一轮就给结论，该实测的仍要实测。
-
-- **[报告控制在两页](collaboration/keep-reports-to-two-pages.md)**
-  四页被要求砍到两页。篇幅会被当成质量标准来读。
-
-- **[mock 全绿，不等于修好了](collaboration/mocks-passing-is-not-a-fix.md)**
-  用例里 mock 立即返回，竞态被完全掩盖。用户否决你的判断时，先假设用户是对的。
-- **[本地绿了再推](collaboration/local-green-before-push.md)**
-  CI 是最终确认，不是调试器。反馈回路越短，改得越准。
-- **[开工前先搜有没有人在做同一件事](collaboration/search-for-competing-pr-first.md)**
-  别人 4 分钟前提的 PR 比你更全，issue 却还挂在 OPEN。
-- **[说人话](collaboration/plain-language-communication.md)**
-  先一句话给结论。术语是给自己省力的，说人话是给对方省力的。
-- **[GitHub 上非必要不加评论](collaboration/fewer-github-comments.md)**
-  每条评论都是一次打断。证据进 PR 描述或 commit message。
-- **[碰真实账号的功能，必须真跑一次](collaboration/live-test-real-accounts.md)**
-  mock 只证明契约对，不证明真能拿到凭据。真实凭据只经环境变量注入。
+- **[先给能用的答案，再决定要不要深挖](collaboration/answer-first-then-investigate.md)** — 多轮取证容易被「算了」打断。第一轮就给结论，该实测的仍要实测
+- **[报告控制在两页](collaboration/keep-reports-to-two-pages.md)** — 四页被要求砍到两页。篇幅会被当成质量标准来读
+- **[本地绿了再推](collaboration/local-green-before-push.md)** — CI 是最终确认，不是调试器。反馈回路越短，改得越准
+- **[开工前先搜有没有人在做同一件事](collaboration/search-for-competing-pr-first.md)** — 别人 4 分钟前提的 PR 比你更全，issue 却还挂在 OPEN
+- **[说人话](collaboration/plain-language-communication.md)** — 先一句话给结论。术语是给自己省力的，说人话是给对方省力的
+- **[GitHub 上非必要不加评论](collaboration/fewer-github-comments.md)** — 每条评论都是一次打断。证据进 PR 描述或 commit message
 
 ## 信息核实
 
