@@ -6,10 +6,10 @@
 
 | 目录 | 主题 | 条目 |
 |---|---|---|
-| [debugging/](debugging/) | 排查与推理的纪律 | 9 |
+| [debugging/](debugging/) | 排查与推理的纪律 | 11 |
 | [verification/](verification/) | 交付前的验证 | 7 |
-| [tooling/](tooling/) | 工具与自动化的边界 | 14 |
-| [collaboration/](collaboration/) | 与人的协作约定 | 11 |
+| [tooling/](tooling/) | 工具与自动化的边界 | 16 |
+| [collaboration/](collaboration/) | 与人的协作约定 | 13 |
 | [research/](research/) | 信息核实的方法 | 2 |
 
 ---
@@ -25,6 +25,8 @@
 - **[别把全量数据读进内存](debugging/dont-load-everything-into-memory.md)** — 一个分析脚本可以把整台生产机拖到 SSH 都连不上
 - **[OOM 看起来像「什么都没发生」](debugging/oom-looks-like-nothing.md)** — `rc=137` 只留一行日志，「单独跑能过」不等于「在调度器里能过」
 - **[分清「水平」和「变化」](debugging/change-vs-level.md)** — 「从 A 到 B」写成「低于 B」，结果会完全反过来
+- **[分不清 TCP 和 UDP，就别急着怪带宽](debugging/compare-transports-before-blaming-bandwidth.md)** — 同一线路 TCP 流畅、UDP 丢 30%，带宽测出来还富余。吞吐和丢包是两个指标
+- **[读 PR 别只看正文](debugging/read-pr-comments-not-just-body.md)** — 正文写着「未联调」，评论里早就贴了联调通过的证据。开口前先读完记录
 
 ## 交付前验证
 
@@ -35,12 +37,6 @@
 - **[一致性不能证明正确性](verification/consistency-is-not-correctness.md)** — 两个实现结果一致，可能只是同一个坏模型
 - **[没见它红过的测试等于没测](verification/make-the-test-fail-first.md)** — 写完测试，把修复改回去看它失败一次
 - **[碰撞检测测不出「该挖的洞没挖」](verification/assert-the-feature-not-just-collisions.md)** — 结构件要逐特征断言，不是跑一遍干涉检查就算验过
-
-- **[分不清 TCP 和 UDP，就别急着怪带宽](debugging/compare-transports-before-blaming-bandwidth.md)**
-  同一线路 TCP 流畅、UDP 丢 30%，带宽测出来还富余。吞吐和丢包是两个指标。
-
-- **[读 PR 别只看正文](debugging/read-pr-comments-not-just-body.md)**
-  正文写着「未联调」，评论里早就贴了联调通过的证据。开口前先读完记录。
 
 ## 工具与自动化
 
