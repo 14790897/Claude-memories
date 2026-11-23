@@ -16,6 +16,7 @@
 
 - **[分不清 TCP 和 UDP，就别急着怪带宽](debugging/compare-transports-before-blaming-bandwidth.md)**
   同一线路 TCP 流畅、UDP 丢 30%，带宽测出来还富余。吞吐和丢包是两个指标。
+
 - **[读 PR 别只看正文](debugging/read-pr-comments-not-just-body.md)**
   正文写着「未联调」，评论里早就贴了联调通过的证据。开口前先读完记录。
 
@@ -47,6 +48,7 @@
 
 - **[浏览器改动自己跑一遍再交付](tooling/verify-in-browser-before-delivery.md)**
   交代码让用户测，被回「你自己打开浏览器测」。实测当场抓到两个静态审阅发现不了的问题。
+
 - **[自动化打开的窗口移出屏幕](tooling/move-automation-windows-offscreen.md)**
   用户不需要提防一个看不见的窗口。只动自己开的，移不动就说明。
 
@@ -63,6 +65,7 @@
 
 - **[先给能用的答案，再决定要不要深挖](collaboration/answer-first-then-investigate.md)**
   多轮取证容易被「算了」打断。第一轮就给结论，该实测的仍要实测。
+
 - **[报告控制在两页](collaboration/keep-reports-to-two-pages.md)**
   四页被要求砍到两页。篇幅会被当成质量标准来读。
 
