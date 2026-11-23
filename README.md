@@ -66,7 +66,7 @@
 - **[CI 的 shell 逻辑，本地就能跑](tooling/run-ci-shell-locally.md)** — 把 run 块从 yml 里抽出来跑。抄脚本会失真，Windows 版 jq 还会给 stdout 加 CRLF
 - **[worktree 里别重装依赖，用 junction 借](tooling/share-node-modules-across-worktrees.md)** — 依赖可以共享，产物必须各自生成，否则程序会加载主检出的代码
 - **[上传到 Release 的文件名会被改写](tooling/release-asset-names-get-sanitized.md)** — 空格变成点号，自动更新按原名找就是 404。文件名一旦有别的系统依赖，它就是接口
-- **[环境里配了代理，git push 会静默失败](tooling/proxy-env-breaks-git-push.md)** — 代理变量指向的端口根本没在监听。网络是通的、工具却不工作时，先 `env | grep -i proxy`
+- **[代理指向死端口时 git 会报错](tooling/proxy-env-breaks-git-push.md)** — 不是静默失败；是管道吞掉了退出码（`| tail` 后 `$?` 变成 0）。`ALL_PROXY` 同样生效
 - **[describe 层的 skip 会让单个用例的 timeout 失效](tooling/describe-skip-disables-per-test-timeout.md)** — 长用例在 10 分钟整被杀，看起来像应用崩溃。用 `test.setTimeout()` 兜底
 - **[beforeAll 是每个 worker 一次，不是每个文件一次](tooling/beforeall-runs-per-worker.md)** — 失败重启后，剩余用例拿到全新环境。需要数据的用例自己幂等补齐
 
